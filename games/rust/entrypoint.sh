@@ -8,13 +8,7 @@ function install() {
 
 #  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64
 
-function rust() {
-  echo "Starting Rust Server"
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64  
-  # while : ; do
-  tmux new-session -d -s server
-  tmux send-keys 'cd /server' C-m
-  tmux send-keys 'exec ./RustDedicated -batchmode -nographics \
+RUST_CMD="exec ./RustDedicated -batchmode -nographics \
     -server.ip "$IP" \
     -server.port "28015" \
     -rcon.ip "$IP" \
@@ -30,17 +24,23 @@ function rust() {
     -server.globalchat true \
     -server.description "$DESCRIPTION" \
     -server.headerimage "$HEADERIMAGE" \
-    -server.url "$URL"' C-m
+    -server.url "$URL""
+
+function rust() {
+  echo "Starting Rust Server"
+  tmux new-session -d -s server
+  tmux send-keys 'cd /server' C-m
+  tmux send-keys "$RUST_CMD" C-m
   tmux detach -s server
-  # echo "Rust Server Restarting"   
-  # done
 }
 
 
 function start() {
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64  
   if [ ! -d /server/steamapps ]; then
     install
   fi
+  # trap exit signals to stop function
   trap stop INT SIGINT SIGTERM
   rust
   running
@@ -69,14 +69,17 @@ function update() {
 # running is for when running the docker to keep the image and server going
 function running() {
   while : ; do
-    sleep 5
+    sleep 15
     SERVER_PID=$(pgrep RustDedicated)
-    SERVER_TIME=$(ps -o etime= -p "$SERVER_PID")
     if [ "$SERVER_PID" = "" ]; then
       echo "Server not running, restarting"
       rust
     else
-      echo "Server Running PID: $SERVER_PID, TIME: $SERVER_TIME"
+      SERVER_TIME=$(ps -o etime= -p "$SERVER_PID")
+      SERVER_CPU=$(ps -o %cpu= -p "$SERVER_PID")
+      SERVER_MEM_KB=$(ps -o vsz= -p "$SERVER_PID")
+      SERVER_MEM_MB=$SERVER_MEM_KB/1024
+      echo "Server Running PID: $SERVER_PID, TIME: $SERVER_TIME, CPU: $SERVER_CPU, MEM: $SERVER_MEM_MB"
     fi
   done
 
