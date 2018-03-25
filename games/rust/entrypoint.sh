@@ -11,16 +11,16 @@ function enviroment() {
     -rcon.port "28016" \
     -rcon.password "$RCON_PASSWORD" \
     -server.maxplayers "$MAX_PLAYERS" \
-    -server.hostname \""$NAME"\" \
+    -server.hostname \"""$NAME""\" \
     -server.identity "$IDENTITY" \
-    -server.level \""$MAP"\" \
+    -server.level \"""$MAP""\" \
     -server.seed "$SEED" \
     -server.worldsize "$WORLDSIZE" \
     -server.saveinterval "$SAVE_INTERVAL" \
     -server.globalchat true \
-    -server.description \""$DESCRIPTION"\" \
-    -server.headerimage \""$HEADERIMAGE"\" \
-    -server.url \""$URL"\" "
+    -server.description \"""$DESCRIPTION""\" \
+    -server.headerimage \"""$HEADERIMAGE""\" \
+    -server.url \"""$URL""\" "
   mkdir -p /server/bin /server/install /server/logs /server/save
   STEAM_LIBS=/server/steamcmd/linux32:/server/steamcmd/linux64
   export PATH=$PATH:/server/bin:/server/steamcmd:/server/install
