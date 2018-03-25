@@ -10,8 +10,7 @@ function enviroment() {
 
 # Install is actuall install or update
 function install() {
-  /steam/steamcmd.sh +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
-  ln -sf /docker/entrypoint.sh /server/bin/entrypoint
+  /server/bin/steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
 }
 
 #  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64
