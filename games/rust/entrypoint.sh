@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function enviroment() {
+  echo "Setting variables"
   cd /server
   APP_ID="258550"
   EXECUTABLE="RustDedicated"
@@ -20,10 +21,10 @@ function enviroment() {
     -server.description "$DESCRIPTION" \
     -server.headerimage "$HEADERIMAGE" \
     -server.url "$URL""
-
   mkdir -p /server/bin /server/install /server/logs /server/save
-  PATH=$PATH:/server/bin:/server/steamcmd:/server/install
-  LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/server/steamcmd/linux32:/server/steamcmd/linux64
+  STEAM_LIBS=/server/steamcmd/linux32:/server/steamcmd/linux64
+  export PATH=$PATH:/server/bin:/server/steamcmd:/server/install
+  export LD_LIBRARY_PATH=$STEAM_LIBS  
 }
 
 # Install is actuall install or update
@@ -33,19 +34,19 @@ function install() {
 
 
 function rust() {
+  echo $LD_LIBRARY_PATH
   FORCE_CMD_LINE=" -batchmode -nographics "$CMD_LINE""
   SERVER_CMD="exec ./"$EXECUTABLE" "$FORCE_CMD_LINE""
   echo "Starting Rust Server"
   tmux new-session -d -s server
   tmux send-keys 'cd /server/install' C-m
-  tmux send-keys "$RUST_CMD"
-  # tmux send-keys C-m
+  tmux send-keys "$SERVER_CMD"
+  tmux send-keys C-m
   tmux detach -s server
 }
 
 
 function start() {
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64  
   if [ ! -d /server/install/steamapps ]; then
     install
   fi

@@ -15,7 +15,7 @@ clean:
 	docker build --no-cache -t $(NS)/$(REPO) .
 
 entrypoint:
-	docker run --rm $(PORTS) -v $(CURDIR):/docker --name lgsm-test -it $(NS)/$(REPO)	shell
+	docker run --rm $(PORTS) -v $(CURDIR)/entrypoint.sh:/server/entrypoint.sh --name lgsm-test -it $(NS)/$(REPO)	shell
 
 interactive:
 	docker run --rm $(PORTS) --name lgsm-test -it $(NS)/$(REPO)
