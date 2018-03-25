@@ -15,7 +15,7 @@ RUST_CMD="exec ./RustDedicated -batchmode -nographics \
     -rcon.port "28016" \
     -rcon.password "$RCON_PASSWORD" \
     -server.maxplayers "$MAX_PLAYERS" \
-    -server.hostname "$SERVER_NAME" \
+    -server.hostname "$NAME" \
     -server.identity "$IDENTITY" \
     -server.level "$MAP" \
     -server.seed "$SEED" \
