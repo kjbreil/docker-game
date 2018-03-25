@@ -48,7 +48,8 @@ RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y \
   binutils \
   bc \
   lib32z1 \
-  libnm-glib-dev:i386 
+  libnm-glib-dev:i386 \
+  dos2unix
 
 RUN rm -rf /var/lib/apt/lists/* && \
   useradd -ms /bin/bash server
