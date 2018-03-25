@@ -3,24 +3,24 @@
 function enviroment() {
   echo "Setting variables"
   cd /server
-  APP_ID="258550"
-  EXECUTABLE="RustDedicated"
-  CMD_LINE="-server.ip "$IP" \
+  export APP_ID="258550"
+  export EXECUTABLE="RustDedicated"
+  export CMD_LINE="-server.ip "$IP" \
     -server.port "28015" \
     -rcon.ip "$IP" \
     -rcon.port "28016" \
     -rcon.password "$RCON_PASSWORD" \
     -server.maxplayers "$MAX_PLAYERS" \
-    -server.hostname "$NAME" \
+    -server.hostname \""$NAME"\" \
     -server.identity "$IDENTITY" \
-    -server.level "$MAP" \
+    -server.level \""$MAP"\" \
     -server.seed "$SEED" \
     -server.worldsize "$WORLDSIZE" \
     -server.saveinterval "$SAVE_INTERVAL" \
     -server.globalchat true \
-    -server.description "$DESCRIPTION" \
-    -server.headerimage "$HEADERIMAGE" \
-    -server.url "$URL""
+    -server.description \""$DESCRIPTION"\" \
+    -server.headerimage \""$HEADERIMAGE"\" \
+    -server.url \""$URL"\" "
   mkdir -p /server/bin /server/install /server/logs /server/save
   STEAM_LIBS=/server/steamcmd/linux32:/server/steamcmd/linux64
   export PATH=$PATH:/server/bin:/server/steamcmd:/server/install
@@ -34,15 +34,27 @@ function install() {
 
 
 function rust() {
-  SU_CMD="su -u server -c "
+  SU_CMD="su - server -c"
   FORCE_CMD_LINE=" -batchmode -nographics "$CMD_LINE""
   SERVER_CMD="exec ./"$EXECUTABLE" "$FORCE_CMD_LINE""
   echo "Starting Rust Server"
-  "$SUDO_CMD" tmux new-session -d -s server
-  "$SUDO_CMD" tmux send-keys 'cd /server/install' C-m
-  "$SUDO_CMD" tmux send-keys "$SERVER_CMD"
-  "$SUDO_CMD" tmux send-keys C-m
-  "$SUDO_CMD" tmux detach -s server
+  $SU_CMD "tmux new-session -d -s server"
+  $SU_CMD "tmux send-keys 'cd /server/install' C-m"
+  $SU_CMD "tmux send-keys 'export LD_LIBRARY_PATH=$STEAM_LIBS' C-m"
+  $SU_CMD "tmux send-keys \"$SERVER_CMD\""
+  # $SU_CMD "tmux send-keys C-m"
+  $SU_CMD "tmux detach -s server"
+}
+
+function server_cmd() {
+  FORCE_CMD_LINE=" -batchmode -nographics "$CMD_LINE""
+  SERVER_CMD="exec ./"$EXECUTABLE" "$FORCE_CMD_LINE""
+  echo $SERVER_CMD
+}
+
+function tmux() {
+  SU_CMD="su - server -c"
+  $SU_CMD "tmux a -t server"
 }
 
 
@@ -93,7 +105,7 @@ function running() {
       SERVER_MEM_KB=$(ps -o vsz= -p "$SERVER_PID")
       SERVER_MEM_MB=$(($SERVER_MEM_KB / 1024))
       echo "Server Running PID: $SERVER_PID, TIME: $SERVER_TIME, CPU: $SERVER_CPU, MEM: $SERVER_MEM_MB"
-      sleep 15      
+      sleep 10      
     fi
   done
 
