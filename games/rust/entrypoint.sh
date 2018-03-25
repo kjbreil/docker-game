@@ -27,7 +27,7 @@ function enviroment() {
   export LD_LIBRARY_PATH=$STEAM_LIBS  
 }
 
-# Install is actuall install or update
+# Install is actually install or update
 function install() {
   steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
 }
