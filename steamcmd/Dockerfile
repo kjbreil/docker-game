@@ -9,4 +9,4 @@ RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.t
 
 WORKDIR /docker
 
-VOLUME [ "/server", "/save" ]
+VOLUME [ "/save" ]

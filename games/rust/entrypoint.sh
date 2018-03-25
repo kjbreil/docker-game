@@ -2,27 +2,33 @@
 
 # Install is actuall install or update
 function install() {
+  cd /
   /steam/steamcmd.sh +login anonymous +force_install_dir /server/ +app_update 258550 +quit
 }
 
-func rust() {
-  exec ./RustDedicated -batchmode -nographics \
-    -server.ip IPAddressHere \
-    -server.port 28015 \
-    -rcon.ip IPAddressHere \
-    -rcon.port 28016 \
-    -rcon.password "rcon password here" \
-    -server.maxplayers 75 \
-    -server.hostname "Server Name" \
-    -server.identity "my_server_identity" \
-    -server.level "Procedural Map" \
-    -server.seed 12345 \
-    -server.worldsize 3000 \
-    -server.saveinterval 300 \-server.globalchat true \
-    -server.description "Description Here" \
-    -server.headerimage "512x256px JPG/PNG headerimage link here" \
-    -server.url "Website Here"
-
+function rust() {
+  echo "\nStarting Rust Server\n"  
+  while : ; do
+    cd /server
+    exec ./RustDedicated -batchmode -nographics \
+      -server.ip "$IP" \
+      -server.port "28015" \
+      -rcon.ip "$IP" \
+      -rcon.port "28016" \
+      -rcon.password "$RCON_PASSWORD" \
+      -server.maxplayers "$MAX_PLAYERS" \
+      -server.hostname "$SERVER_NAME" \
+      -server.identity "$IDENTITY" \
+      -server.level "$MAP" \
+      -server.seed "$SEED" \
+      -server.worldsize "$WORLDSIZE" \
+      -server.saveinterval "$SAVE_INTERVAL" \
+      -server.globalchat true \
+      -server.description "$DESCRIPTION" \
+      -server.headerimage "$HEADERIMAGE" \
+      -server.url "$URL"
+    echo "\nRust Server Restarting\n"   
+  done
 }
 
 
@@ -31,11 +37,9 @@ function start() {
     install
   fi
      # trap exit signals
-    trap stop INT SIGINT SIGTERM
-    # sleep 10
-    echo "RUNNING?"
-    running
-  
+  trap stop INT SIGINT SIGTERM
+  # sleep 10
+  rust
 }
 
 # stop the rust server
@@ -76,12 +80,7 @@ function test2() {
 
 
 if [ "$1" != "" ]; then
-  if [ "$1" == "install" ]; then
-    install
-  fi
-  if [ "$1" == "shell" ]; then
-    shell
-  fi
+  "$1"
 else
   start
 fi
