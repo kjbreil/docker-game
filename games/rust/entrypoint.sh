@@ -77,7 +77,7 @@ function running() {
       SERVER_TIME=$(ps -o etime= -p "$SERVER_PID")
       SERVER_CPU=$(ps -o %cpu= -p "$SERVER_PID")
       SERVER_MEM_KB=$(ps -o vsz= -p "$SERVER_PID")
-      SERVER_MEM_MB=$(echo $(($SERVER_MEM_KB / 1024)))
+      SERVER_MEM_MB=$(($SERVER_MEM_KB / 1024))
       echo "Server Running PID: $SERVER_PID, TIME: $SERVER_TIME, CPU: $SERVER_CPU, MEM: $SERVER_MEM_MB"
       sleep 15      
     fi
