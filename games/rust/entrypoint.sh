@@ -93,5 +93,5 @@ function shell() {
 if [ "$1" != "" ]; then
   "$1"
 else
-  start
+  shell
 fi
