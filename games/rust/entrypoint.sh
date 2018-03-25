@@ -1,8 +1,7 @@
 #!/bin/bash
 
 function enviroment() {
-  echo "Setting variables"
-  cd /server
+  export -f enviroment
   export APP_ID="258550"
   export EXECUTABLE="RustDedicated"
   export CMD_LINE="-server.ip "$IP" \
@@ -27,24 +26,62 @@ function enviroment() {
   export LD_LIBRARY_PATH=$STEAM_LIBS  
 }
 
-# Install is actually install or update
-function install() {
+function install_server() {
+  enviroment
   steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
 }
 
+# Install is actually install or update if needed but wont validate
+function install() {
+  export -f install_server
+  # export -f install_server
+  su server -c "bash -c install_server"
+}
 
-function rust() {
-  SU_CMD="su - server -c"
+function update_server() {
+  enviroment
+  steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" -validate +quit
+}
+
+# validate server and force update
+function update() {
+  export -f update_server
+  su server -c "bash -c update_server"
+}
+
+function info_server() {
+  enviroment
+  steamcmd +login anonymous +app_info_print "$APP_ID" +quit
+  # steamcmd +login anonymous +app_info_update 1 +app_info_print "$APP_ID" +quit
+}
+
+function info() {
+  export -f info_server
+  su server -c "bash -c info_server"
+}
+
+
+function server() {
+  export -f start_server
+  su server -c "bash -c start_server"
+}
+
+function start_server() {
+  export PATH="$PATH":/server/bin:/server/steamcmd:/server/install
+  export LD_LIBRARY_PATH=/server/bin:/server/steamcmd:/server/install
+  
   FORCE_CMD_LINE=" -batchmode -nographics "$CMD_LINE""
   SERVER_CMD="exec ./"$EXECUTABLE" "$FORCE_CMD_LINE""
+  
   echo "Starting Rust Server"
-  $SU_CMD "tmux new-session -d -s server"
-  $SU_CMD "tmux send-keys 'cd /server/install' C-m"
-  $SU_CMD "tmux send-keys 'export LD_LIBRARY_PATH=$STEAM_LIBS' C-m"
-  $SU_CMD "tmux send-keys \"$SERVER_CMD\""
-  # $SU_CMD "tmux send-keys C-m"
-  $SU_CMD "tmux detach -s server"
+  tmux new-session -d -s server
+  tmux send-keys 'cd /server/install' C-m
+  tmux send-keys "$SERVER_CMD"
+  tmux send-keys C-m
+  tmux detach -s server
 }
+
+
 
 function server_cmd() {
   FORCE_CMD_LINE=" -batchmode -nographics "$CMD_LINE""
@@ -53,8 +90,7 @@ function server_cmd() {
 }
 
 function tmux() {
-  SU_CMD="su - server -c"
-  $SU_CMD "tmux a -t server"
+  su server -c "tmux a -t server"
 }
 
 
@@ -64,9 +100,11 @@ function start() {
   fi
   # trap exit signals to stop function
   trap stop INT SIGINT SIGTERM
-  rust
+  server
   running
 }
+
+
 
 # stop the rust server
 function stop() {
@@ -83,10 +121,6 @@ function stop() {
   exit 0
 }
 
-# validate and update scripts and server
-function update() {
-  echo "Updating NOTHING"
-}
 
 function logs() {
   echo "Logs NOTHING WORKING ANYMORE"
@@ -98,7 +132,7 @@ function running() {
     SERVER_PID=$(pgrep $EXECUTABLE)
     if [ "$SERVER_PID" = "" ]; then
       echo "Server not running, restarting"
-      rust
+      server
     else
       SERVER_TIME=$(ps -o etime= -p "$SERVER_PID")
       SERVER_CPU=$(ps -o %cpu= -p "$SERVER_PID")
