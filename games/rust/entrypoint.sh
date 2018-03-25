@@ -9,7 +9,7 @@ function install() {
 #  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64
 
 function rust() {
-  echo "\nStarting Rust Server\n"  
+  echo "Starting Rust Server"  
   while : ; do
     cd /server
     exec ./RustDedicated -batchmode -nographics \
@@ -29,7 +29,7 @@ function rust() {
       -server.description "$DESCRIPTION" \
       -server.headerimage "$HEADERIMAGE" \
       -server.url "$URL"
-    echo "\nRust Server Restarting\n"   
+    echo "Rust Server Restarting"   
   done
 }
 
