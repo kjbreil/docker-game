@@ -11,7 +11,6 @@ function enviroment() {
 # Install is actuall install or update
 function install() {
   /steam/steamcmd.sh +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
-  ln -sf /steam/steamcmd.sh /server/bin/steamcmd
   ln -sf /docker/entrypoint.sh /server/bin/entrypoint
 }
 
@@ -39,7 +38,7 @@ function rust() {
     -server.url "$URL""
   echo "Starting Rust Server"
   tmux new-session -d -s server
-  tmux send-keys 'cd /server' C-m
+  tmux send-keys 'cd /server/install' C-m
   tmux send-keys "$RUST_CMD"
   # tmux send-keys C-m
   tmux detach -s server
@@ -48,7 +47,7 @@ function rust() {
 
 function start() {
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64  
-  if [ ! -d /server/steamapps ]; then
+  if [ ! -d /server/install/steamapps ]; then
     install
   fi
   # trap exit signals to stop function
@@ -75,6 +74,10 @@ function stop() {
 # validate and update scripts and server
 function update() {
   echo "Updating NOTHING"
+}
+
+function logs() {
+  echo "Logs NOTHING WORKING ANYMORE"
 }
 
 # running is for when running the docker to keep the image and server going
