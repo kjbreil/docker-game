@@ -49,11 +49,15 @@ RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y \
   bc \
   lib32z1 \
   libnm-glib-dev:i386 \
-  dos2unix
+  dos2unix \
+  jq
 
 RUN rm -rf /var/lib/apt/lists/* && \
   useradd -b / -m -s /bin/bash server
 
+
+
 USER server
 WORKDIR /server
 RUN mkdir -p /server/bin /server/install /server/logs /server/save /server/steamcmd
+
