@@ -1,18 +1,26 @@
 #!/bin/bash
 
 function enviroment() {
+  cd /server
+  APP_ID="258550"
+  mkdir -p /server/bin /server/install /server/logs /server/save
+  PATH=$PATH:/server/bin:/server/install
   LD_LIBRARY_PATH=/steam/linux32:/steam/linux64
 }
 
 # Install is actuall install or update
 function install() {
-  cd /
-  /steam/steamcmd.sh +login anonymous +force_install_dir /server/ +app_update 258550 +quit
+  /steam/steamcmd.sh +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
+  ln -sf /steam/steamcmd.sh /server/bin/steamcmd
+  ln -sf /docker/entrypoint.sh /server/bin/entrypoint
 }
 
 #  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64
 
-RUST_CMD="exec ./RustDedicated -batchmode -nographics \
+
+
+function rust() {
+  RUST_CMD="exec ./RustDedicated -batchmode -nographics \
     -server.ip "$IP" \
     -server.port "28015" \
     -rcon.ip "$IP" \
@@ -29,9 +37,6 @@ RUST_CMD="exec ./RustDedicated -batchmode -nographics \
     -server.description "$DESCRIPTION" \
     -server.headerimage "$HEADERIMAGE" \
     -server.url "$URL""
-
-function rust() {
-  enviroment
   echo "Starting Rust Server"
   tmux new-session -d -s server
   tmux send-keys 'cd /server' C-m
@@ -96,8 +101,10 @@ function shell() {
   exit 0
 }
 
+enviroment
+
 if [ "$1" != "" ]; then
   "$1"
 else
-  shell
+  start
 fi

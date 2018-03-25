@@ -8,13 +8,13 @@ ENV RCON_PASSWORD "docker"
 ENV MAX_PLAYERS "69"
 ENV NAME "\"Rust Docker\""
 ENV IDENTITY "my_server_identity"
-ENV MAP "Procedural Map"
+ENV MAP "\"Procedural Map\""
 ENV SEED "12345"
 ENV WORLDSIZE "3000"
 ENV SAVE_INTERVAL "300"
-ENV DESCRIPTION "Default Description"
-ENV HEADERIMAGE ""
-ENV URL "https://github.com/kjbreil/docker-game"
+ENV DESCRIPTION "\"Default Description\""
+ENV HEADERIMAGE "\"https://\""
+ENV URL "\"https://github.com/kjbreil/docker-game\""
 
 COPY entrypoint.sh /docker/entrypoint.sh 
 RUN dos2unix /docker/entrypoint.sh

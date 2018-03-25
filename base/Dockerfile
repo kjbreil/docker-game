@@ -54,3 +54,5 @@ RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y \
 RUN rm -rf /var/lib/apt/lists/* && \
   useradd -b / -m -s /bin/bash server
 
+USER server
+RUN mkdir -p /server/bin /server/install /server/logs /server/save /server/steamcmd
