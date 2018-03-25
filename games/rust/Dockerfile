@@ -23,6 +23,7 @@ EXPOSE 28015/tcp 28015/udp 28016/tcp 28016/udp
 RUN dos2unix ./entrypoint.sh
 RUN ./entrypoint.sh install
 
+USER root
 ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["start"]

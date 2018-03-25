@@ -34,15 +34,15 @@ function install() {
 
 
 function rust() {
-  echo $LD_LIBRARY_PATH
+  SU_CMD="su -u server -c "
   FORCE_CMD_LINE=" -batchmode -nographics "$CMD_LINE""
   SERVER_CMD="exec ./"$EXECUTABLE" "$FORCE_CMD_LINE""
   echo "Starting Rust Server"
-  tmux new-session -d -s server
-  tmux send-keys 'cd /server/install' C-m
-  tmux send-keys "$SERVER_CMD"
-  tmux send-keys C-m
-  tmux detach -s server
+  "$SUDO_CMD" tmux new-session -d -s server
+  "$SUDO_CMD" tmux send-keys 'cd /server/install' C-m
+  "$SUDO_CMD" tmux send-keys "$SERVER_CMD"
+  "$SUDO_CMD" tmux send-keys C-m
+  "$SUDO_CMD" tmux detach -s server
 }
 
 
