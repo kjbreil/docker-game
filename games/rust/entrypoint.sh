@@ -6,6 +6,8 @@ function install() {
   /steam/steamcmd.sh +login anonymous +force_install_dir /server/ +app_update 258550 +quit
 }
 
+#  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64
+
 function rust() {
   echo "\nStarting Rust Server\n"  
   while : ; do
@@ -33,7 +35,7 @@ function rust() {
 
 
 function start() {
-  if [ ! -d /server ]; then
+  if [ ! -d /server/steamapps ]; then
     install
   fi
      # trap exit signals
@@ -71,13 +73,8 @@ function running() {
 
 function shell() {
   /bin/bash
+  exit 0
 }
-
-
-function test2() {
-  echo "TEST - 2"
-}
-
 
 if [ "$1" != "" ]; then
   "$1"
