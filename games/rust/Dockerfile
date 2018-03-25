@@ -16,12 +16,17 @@ ENV DESCRIPTION "Default Description"
 ENV HEADERIMAGE ""
 ENV URL "https://github.com/kjbreil/docker-game"
 
-COPY entrypoint.sh entrypoint.sh 
+COPY entrypoint.sh /docker/entrypoint.sh 
+RUN dos2unix /docker/entrypoint.sh
 
 EXPOSE 28015/tcp 28015/udp 28016/tcp 28016/udp
 
-RUN dos2unix ./entrypoint.sh && ./entrypoint.sh install
+USER server
 
-ENTRYPOINT ["./entrypoint.sh"]
+WORKDIR /server
+
+RUN /docker/entrypoint.sh install
+
+ENTRYPOINT ["/docker/entrypoint.sh"]
 
 CMD ["start"]

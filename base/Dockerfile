@@ -52,5 +52,5 @@ RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y \
   dos2unix
 
 RUN rm -rf /var/lib/apt/lists/* && \
-  useradd -ms /bin/bash server
+  useradd -b / -m -s /bin/bash server
 
