@@ -3,23 +3,8 @@
 function enviroment() {
   cd /server
   APP_ID="258550"
-  mkdir -p /server/bin /server/install /server/logs /server/save
-  PATH=$PATH:/server/bin:/server/install
-  LD_LIBRARY_PATH=/steam/linux32:/steam/linux64
-}
-
-# Install is actuall install or update
-function install() {
-  /server/bin/steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
-}
-
-#  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/steam/linux32:/steam/linux64
-
-
-
-function rust() {
-  RUST_CMD="exec ./RustDedicated -batchmode -nographics \
-    -server.ip "$IP" \
+  EXECUTABLE="RustDedicated"
+  CMD_LINE="-server.ip "$IP" \
     -server.port "28015" \
     -rcon.ip "$IP" \
     -rcon.port "28016" \
@@ -35,6 +20,21 @@ function rust() {
     -server.description "$DESCRIPTION" \
     -server.headerimage "$HEADERIMAGE" \
     -server.url "$URL""
+
+  mkdir -p /server/bin /server/install /server/logs /server/save
+  PATH=$PATH:/server/bin:/server/steamcmd:/server/install
+  LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/server/steamcmd/linux32:/server/steamcmd/linux64
+}
+
+# Install is actuall install or update
+function install() {
+  steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
+}
+
+
+function rust() {
+  FORCE_CMD_LINE=" -batchmode -nographics "$CMD_LINE""
+  SERVER_CMD="exec ./"$EXECUTABLE" "$FORCE_CMD_LINE""
   echo "Starting Rust Server"
   tmux new-session -d -s server
   tmux send-keys 'cd /server/install' C-m
@@ -82,7 +82,7 @@ function logs() {
 # running is for when running the docker to keep the image and server going
 function running() {
   while : ; do
-    SERVER_PID=$(pgrep RustDedicated)
+    SERVER_PID=$(pgrep $EXECUTABLE)
     if [ "$SERVER_PID" = "" ]; then
       echo "Server not running, restarting"
       rust
