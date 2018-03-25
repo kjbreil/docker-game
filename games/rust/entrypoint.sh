@@ -1,5 +1,9 @@
 #!/bin/bash
 
+function enviroment() {
+  LD_LIBRARY_PATH=/steam/linux32:/steam/linux64
+}
+
 # Install is actuall install or update
 function install() {
   cd /
@@ -27,10 +31,12 @@ RUST_CMD="exec ./RustDedicated -batchmode -nographics \
     -server.url "$URL""
 
 function rust() {
+  enviroment
   echo "Starting Rust Server"
   tmux new-session -d -s server
   tmux send-keys 'cd /server' C-m
-  tmux send-keys "$RUST_CMD" C-m
+  tmux send-keys "$RUST_CMD"
+  # tmux send-keys C-m
   tmux detach -s server
 }
 
