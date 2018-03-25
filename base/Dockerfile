@@ -55,4 +55,5 @@ RUN rm -rf /var/lib/apt/lists/* && \
   useradd -b / -m -s /bin/bash server
 
 USER server
+WORKDIR /server
 RUN mkdir -p /server/bin /server/install /server/logs /server/save /server/steamcmd
