@@ -1,6 +1,6 @@
 NS = kjbreil
 
-REPO = rust-server:TESTING
+REPO = rust-server:latest
 
 PORTS = -p 28016:28016/tcp -p 28015:28015/tcp -p 28015:28015/udp
 

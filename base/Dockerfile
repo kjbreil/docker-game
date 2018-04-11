@@ -5,6 +5,7 @@ LABEL maintainer="Kjell Breiland <kjell.breiland@gmail.com>"
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y \
+  openssh-server \
   binutils \
   mailutils \
   postfix \

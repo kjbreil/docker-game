@@ -26,6 +26,14 @@ function enviroment() {
   export LD_LIBRARY_PATH=$STEAM_LIBS  
 }
 
+function installed_version() {
+  INSTALLED_VERSION=$(awk '/"buildid"/{print $NF}' /server/install/steamapps/appmanifest_"$APP_ID".acf)
+  # INSTALLED_VERSION="${INSTALLED_VERSION%\"}"
+  # INSTALLED_VERSION="${INSTALLED_VERSION#\"}"
+  export INSTALLED_VERSION=$INSTALLED_VERSION
+  echo $INSTALLED_VERSION
+}
+
 function install_server() {
   enviroment
   steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
@@ -51,7 +59,11 @@ function update() {
 
 function info_server() {
   enviroment
-  steamcmd +login anonymous +app_info_print "$APP_ID" +quit
+  steamcmd +login anonymous +app_info_print "$APP_ID" +quit >> server_info.json
+  SERVER_VERSION=$(awk '/"buildid"/{print $NF}' /server/server_info.json)
+  # SERVER_VERSION="${SERVER_VERSION%\"}"
+  # SERVER_VERSION="${SERVER_VERSION#\"}"
+  echo "$SERVER_VERSION"
   # steamcmd +login anonymous +app_info_update 1 +app_info_print "$APP_ID" +quit
 }
 
