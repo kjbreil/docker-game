@@ -13,6 +13,6 @@ games:
 	$(MAKE) -C games
 
 clean:
-	$(MAKE) -C base
-	$(MAKE) -C steamcmd
-	$(MAKE) -C games
+	$(MAKE) -C base clean
+	$(MAKE) -C steamcmd clean
+	$(MAKE) -C games clean
