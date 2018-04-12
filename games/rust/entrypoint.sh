@@ -36,8 +36,7 @@ function installed_version() {
 
 function install_server() {
   enviroment
-  # steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
-  steamcmd +login anonymous +force_install_dir /server/install/ +validate "$APP_ID" +quit
+  steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
 }
 
 # Install is actually install or update if needed but wont validate
@@ -50,7 +49,7 @@ function install() {
 
 function update_server() {
   enviroment
-  steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" -validate +quit
+  steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +validate +quit
 }
 
 # validate server and force update

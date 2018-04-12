@@ -21,7 +21,7 @@ interactive:
 	docker run --rm $(PORTS) --name lgsm-test -it $(NS)/$(REPO)
 
 shell:
-	docker run --rm $(PORTS) --name lgsm-test -it $(NS)/$(REPO) /bin/bash
+	docker run --rm $(PORTS) --name lgsm-test -it $(NS)/$(REPO) shell
 
 run:
 	docker run --rm $(PORTS) --name lgsm-test $(NS)/$(REPO)
