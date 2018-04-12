@@ -36,11 +36,13 @@ function installed_version() {
 
 function install_server() {
   enviroment
-  steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
+  # steamcmd +login anonymous +force_install_dir /server/install/ +app_update "$APP_ID" +quit
+  steamcmd +login anonymous +force_install_dir /server/install/ +validate "$APP_ID" +quit
 }
 
 # Install is actually install or update if needed but wont validate
 function install() {
+  df -h
   export -f install_server
   # export -f install_server
   su server -c "bash -c install_server"
@@ -110,6 +112,7 @@ function start() {
   if [ ! -d /server/install/steamapps ]; then
     install
   fi
+  update
   # trap exit signals to stop function
   trap stop INT SIGINT SIGTERM
   server
