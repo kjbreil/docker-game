@@ -24,6 +24,7 @@ RUN dos2unix ./entrypoint.sh
 
 USER root
 # RUN ./entrypoint.sh install
+VOLUME [ "/server/save", "/server/logs" ]
 ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["start"]

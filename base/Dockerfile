@@ -52,7 +52,8 @@ RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y \
   libnm-glib-dev:i386 \
   dos2unix \
   jq \
-  libnss-resolve:i386
+  libnss-resolve:i386 \
+  iputils-ping
 
 RUN rm -rf /var/lib/apt/lists/* && \
   useradd -b / -m -s /bin/bash server

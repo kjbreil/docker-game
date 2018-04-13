@@ -23,7 +23,9 @@ function enviroment() {
   mkdir -p /server/bin /server/install /server/logs /server/save
   STEAM_LIBS=/server/steamcmd/linux32:/server/steamcmd/linux64
   export PATH=$PATH:/server/bin:/server/steamcmd:/server/install
-  export LD_LIBRARY_PATH=$STEAM_LIBS  
+  export LD_LIBRARY_PATH=$STEAM_LIBS
+  chown -R server /server
+
 }
 
 function installed_version() {
